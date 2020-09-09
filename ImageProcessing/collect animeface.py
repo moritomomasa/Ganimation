@@ -30,16 +30,19 @@ def get_face(img_path,real_path):
         print(len(faces), "faces were found !!")
         return True
 #https://safebooru.org/index.php?page=post&s=list&tags=all&pid=より画像を集める
-def savepicture(soup,url_list,urls,num):
+def savepicture(soup,url_list,urls,num,id):
+    id=0
     for url in urls:
         response = req.get(url)
         soup = beu(response.text, "lxml")
         imgs = soup.find_all("img")
-        id = 0
+        #id=0
         url_list=list(set(url_list))
 
+        #print(type(list(imgs)[0]["src"]))
         #画像の保存
         for img in imgs:
+
                 if str(img["src"]).find("https://")==-1 :
                     img["src"]="https:"+img["src"]
                 #print(img["src"])
@@ -54,23 +57,26 @@ def savepicture(soup,url_list,urls,num):
                     ext=".png"
                 elif img["src"] in ".jpg":
                     ext=".jpg"
+                if img["src"]=="https://safebooru.org/images/p.png" or img["src"]=="https://safebooru.org/images/safechibi.png":
+                    continue
                 with open("../DataSets/Images_for_GAN/Temp_Images"+str(num)+"/temp"+str(id)+ext,"wb") as f:
                     f.write(r.content)
                 id+=1
-    return imgs
+    return imgs,id
 def GetBigPicture(soup):
     img_urls=soup.find_all("a")
-    big_list=[]
+    big_list=set([])
     for img_url in img_urls:
         try :
             # img_url=list(img_url)
             a=img_url["id"]
             url=str(img_url["href"])
             #print("https://safebooru.org/"+url)
-            big_list.append("https://safebooru.org/"+url)
+            big_list.add("https://safebooru.org/"+url)
 
         except KeyError as e:
             pass
+    #print(len(big_list))
     return big_list
 
 def colect_girl_images(limit,init=0,num=0):
@@ -88,20 +94,24 @@ def colect_girl_images(limit,init=0,num=0):
         response = req.get(url)
         soup = beu(response.text, "lxml")
         big_list=GetBigPicture(soup)
-        imgs=savepicture(soup,url_list,big_list,num)
-        temp_imgs=os.listdir("../DataSets/Images_for_GAN/Temp_Images"+str(num))
+        imgs=savepicture(soup,url_list,big_list,num,id)
+        temp_imgs = os.listdir("../DataSets/Images_for_GAN/Temp_Images" + str(num))
+        i = 0
+        # 顔の検出
+        for temp in temp_imgs:
+            img_path = "../DataSets/Images_for_GAN/Temp_Images" + str(num) + "/" + temp
+            flg = get_face(img_path, "../DataSets/Images_for_GAN/Real_Images/Girl0" + str(num) + "/" + "/girl_" + str(
+                face_id) + ".png")
 
-        #顔の検出
+            face_id += 1
+            if flg:
+                # print(i)
 
-        img_path="../DataSets/Images_for_GAN/Temp_Images"+str(num)+"/"+temp_imgs[1]
+                url_list.append(list(imgs)[i]["src"])
 
-        flg=get_face(img_path,"../DataSets/Images_for_GAN/Real_Images/Girl0"+str(num)+"/"+"/girl_"+str(face_id)+".png")
-        face_id+=1
-        if flg:
-            # print(i)
-            url_list.append(list(imgs)[1]["src"])
-
+            i += 1
         step+=40
+
         if len(os.listdir("../DataSets/Images_for_GAN/Real_Images/Girl0"+str(num)+"/"))>=limit:
             break
         print("Collected ",len(os.listdir("../DataSets/Images_for_GAN/Real_Images/Girl0"+str(num)+"/"))," images .\n" )
