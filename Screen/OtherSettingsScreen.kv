@@ -1,4 +1,7 @@
 <OtherSettingsScreen>:
+    drop_area_image: drop_area_image
+    drop_area_label: drop_area_label
+
     BoxLayout:
         orientation: 'vertical'     # 'horizontal'だと横一列
         size: root.size
@@ -66,17 +69,135 @@
                     anchor_x: 'center'
                     anchor_y: 'center'
                     padding: 40
-                    Label:
-                        text: '各種設定'
-                        color: 1,1,1,1
-                        font_size: 50
-                        canvas.before:
-                            Color:
-                                rgba: 0.2, 0.2, 0.2, 1
-                            Rectangle:
-                                pos: self.pos
-                                size: self.size
 
+                    BoxLayout:
+                        orientation: 'vertical'
+
+                        BoxLayout:
+                            size_hint_y: 0.6
+                            orientation: 'horizontal'
+
+                            BoxLayout:
+                                size_hint_x: 0.475
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.9, 0.9, 0.9, 1
+                                    Rectangle:
+                                        pos: self.pos
+                                        size: self.size
+
+                                AnchorLayout:
+                                    anchor_x: 'center'
+                                    anchor_y: 'center'
+                                    padding: 7
+
+                                    Label:
+                                        id: drop_area_label
+                                        bold: True
+                                        text: 'ファイルをドラッグ＆ドロップ'
+                                        color: 1,1,1,1
+                                        font_size: dp(20)
+
+                                        canvas.before:
+                                            Color:
+                                                rgba: 0.1, 0.1, 0.1, 1
+                                            Rectangle:
+                                                pos: self.pos
+                                                size: self.size
+                                    Image:
+                                        id: drop_area_image
+                                        source: root.image_src
+                                        center_x: self.parent.center_x
+                                        center_y: self.parent.center_y
+                                        allow_stretch: True
+
+                            BoxLayout:
+                                size_hint_x: 0.05
+
+                            BoxLayout:
+                                size_hint_x: 0.475
+                                orientation: 'vertical'
+
+                                BoxLayout:
+                                    size_hint_y: 0.15
+                                    Label:
+                                        text: '背景の設定'
+                                        color: 1,1,1,0.8
+                                        font_size: dp(25)
+                                        text_size: self.size
+                                        halign: 'center'
+                                        valign: 'middle'
+
+                                        canvas.before:
+                                            Color:
+                                                rgba: 0.2, 0.2, 0.2, 1
+                                            Rectangle:
+                                                pos: self.pos
+                                                size: self.size
+
+                                BoxLayout:
+                                    size_hint_y: 0.85
+
+                                    BoxLayout:
+                                        orientation: 'vertical'
+
+                                        BoxLayout:
+                                            size_hint_y: 0.15
+                                            Label:
+                                                text: '　・背景画像を左の枠内にドラッグ&ドロップしてください'
+                                                font_size: dp(20)
+                                                text_size: self.size
+                                                halign: 'left'
+                                                valign: 'middle'
+
+                                                color: 1,1,1,0.8
+                                                canvas.before:
+                                                    Color:
+                                                        rgba: 0.3, 0.3, 0.3, 1
+                                                    Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+
+                                        BoxLayout:
+                                            size_hint_y: 0.15
+                                            Label:
+                                                text: '　・画像サイズ・縦横比は画面に応じて自動変更されます'
+                                                font_size: dp(20)
+                                                text_size: self.size
+                                                halign: 'left'
+                                                valign: 'middle'
+
+                                                color: 1,1,1,0.8
+                                                canvas.before:
+                                                    Color:
+                                                        rgba: 0.3, 0.3, 0.3, 1
+                                                    Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+                                        BoxLayout:
+                                            size_hint_y: 0.7
+                                            Label:
+                                                text: ''
+                                                color: 1,1,1,0.8
+                                                font_size: dp(20)
+                                                canvas.before:
+                                                    Color:
+                                                        rgba: 0.3, 0.3, 0.3, 1
+                                                    Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+                        BoxLayout:
+                            size_hint_y: 0.4
+                            Label:
+                                text: ''
+                                color: 1,1,1,1
+                                font_size: 50
+                                canvas.before:
+                                    Color:
+                                        rgba: 0.1, 0.1, 0.1, 1
+                                    Rectangle:
+                                        pos: self.pos
+                                        size: self.size
         BoxLayout: #画像読み込み画面
             size_hint_y: 0.1
 

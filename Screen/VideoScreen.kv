@@ -1,12 +1,17 @@
 <VideoScreen>:
-    canvas.before:
-        Rectangle:
-            source: './UI_images/bg.jpg'
-            pos: self.pos
-            size: self.size
+    bg: bg
+    anime: anime
 
-    VideoManager:
-        id: camera_preview
+    Image:
+        id: bg
+        source: '../images/bg.png'
+        pos: self.pos
+        size: self.size
+        keep_ratio: False
+        allow_stretch: True
+
+    Image:
+        id: anime
         size: root.size
         allow_stretch: True
 
