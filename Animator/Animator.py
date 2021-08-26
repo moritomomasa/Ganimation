@@ -1,15 +1,15 @@
 import os
 import sys
-from tkinter.constants import PROJECTING
+# from tkinter.constants import PROJECTING
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
-from tkinter import Tk, Frame, LEFT, Label, BOTH, GROOVE, Button, filedialog, PhotoImage, messagebox
+# from tkinter import Tk, Frame, LEFT, Label, BOTH, GROOVE, Button, filedialog, PhotoImage, messagebox
 
 import numpy as np
 import PIL.Image
-import PIL.ImageTk
+# import PIL.ImageTk
 import cv2
 import dlib
 import torch
