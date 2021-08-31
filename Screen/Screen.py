@@ -35,7 +35,6 @@ Builder.load_file('TutorialScreen.kv')
 Builder.load_file('SettingsScreen.kv')
 Builder.load_file('VideoScreen.kv')
 Builder.load_file('OtherSettingsScreen.kv')
-Builder.load_file('Popup1.kv')
 
 # アニメ顔画像のパス
 output_path = '../images/output.png'
