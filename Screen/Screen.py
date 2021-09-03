@@ -41,13 +41,14 @@ animator=CreateAnimator()
 #animator.update_image().show()
 
 # フォント読み込み Windows用
-resource_add_path('{}\\{}'.format(os.environ['SYSTEMROOT'], 'Fonts'))
-LabelBase.register(DEFAULT_FONT, 'MSGOTHIC.ttc')
+#resource_add_path('{}\\{}'.format(os.environ['SYSTEMROOT'], 'Fonts'))
+#LabelBase.register(DEFAULT_FONT, 'MSGOTHIC.ttc')
 
 # フォント読み込み Mac用
 #resource_add_path('./Font')
 #LabelBase.register(DEFAULT_FONT, 'ipaexg.ttf')
-# フォント読み込み
+
+# フォント読み込み 共通
 resource_add_path('./Font')
 LabelBase.register(DEFAULT_FONT, 'ipaexg.ttf')
 
@@ -80,6 +81,7 @@ selected_bg = 1
 #ビデオ画面のupdateオンオフ
 playing_video = False
 selected_window = "video"
+webcamera = 0
 
 # チュートリアル画面
 class TutorialScreen(Screen):
@@ -142,7 +144,7 @@ class SettingsScreen(Screen):
         global playing_video
         playing_video = True
         print('start')
-    
+
     def select_button(self, num):
         global output_bg_path
         print(num)
@@ -244,7 +246,7 @@ class VideoScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.bg_src = "../images/save/bg/save1/bg.png"
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture(webcamera)
         self.animator = animator
 
         Clock.schedule_interval(self.update, 0.05)
@@ -285,11 +287,11 @@ class VideoScreen(Screen):
         if not flg:
             return
         # print("animation")
-        
 
         #アニメ顔画像のデータベースから取得
         self.animeface = DB.GetAnimeFaces()
         self.animeface =cv2.resize(self.animeface, (500, 500))
+
 
         # cv2.imwrite("./screen_cap.png",self.animeface)
 
@@ -297,8 +299,8 @@ class VideoScreen(Screen):
         # cv2.waitKey(4)
 
         # デバッグ用
-        # self.animeface = self.frame
-        # self.animeface = cv2.resize(self.frame, (280, 280))
+        #self.animeface = self.frame
+        #self.animeface = cv2.resize(self.frame, (280, 280))
 
         # Kivy Textureに変換
         # buf = cv2.flip(self.animeface, -1).tobytes()
@@ -319,7 +321,7 @@ class VideoScreen(Screen):
         self.stop_video()
 
         content = TutorialScreen(popup_close=self.popup_close)
-        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.7, 0.7), auto_dismiss=False)
+        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.8, 0.8), auto_dismiss=False)
         self.popup.open()
 
     # 設定ポップアップ表示
@@ -329,7 +331,7 @@ class VideoScreen(Screen):
         self.stop_video()
 
         content = SettingsScreen(popup_close=self.popup_close, to_settings2=self.to_settings2)
-        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.7, 0.7), auto_dismiss=False)
+        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.8, 0.8), size = (72, 48), auto_dismiss=False)
         self.popup.open()
 
     # 顔イラスト設定へ画面遷移
@@ -339,7 +341,7 @@ class VideoScreen(Screen):
 
         self.popup.dismiss()
         content = SettingsScreen(popup_close=self.popup_close, to_settings2=self.to_settings2)
-        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.7, 0.7), auto_dismiss=False)
+        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.8, 0.8), auto_dismiss=False)
         self.popup.open()
 
     # 背景設定へ画面遷移
@@ -349,7 +351,7 @@ class VideoScreen(Screen):
 
         self.popup.dismiss()
         content = OtherSettingsScreen(popup_close=self.popup_close, to_settings1=self.to_settings1)
-        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.7, 0.7), auto_dismiss=False)
+        self.popup = Popup(title='',separator_height=0, content=content, size_hint=(0.8, 0.8), auto_dismiss=False)
         self.popup.open()
 
     def popup_close(self):
@@ -359,73 +361,12 @@ class VideoScreen(Screen):
         self.start_video()
         self.popup.dismiss()
         self.bg.reload() #背景更新
-        self.capture = cv2.VideoCapture(0)
-
-
-
-# class VideoManager(Image):
-
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#         self.is_animation = False
-#         self.capture = cv2.VideoCapture(1)
-#         self.animator = animator
-
-#         Clock.schedule_interval(self.update, 0.07)
-
-#     def start_animation(self):
-#         self.is_animation = True
-#         self.capture = cv2.VideoCapture(1)
-
-#     def stop_animation(self):
-#         self.is_animating = False
-#         self.cap.release()
-
-#     def update(self, dt):
-#         if not playing_video:
-#             return
-
-#         ret, self.frame = self.capture.read()
-
-#         # リアル顔画像をデータベースにセット
-#         DB.SetRealFaces(self.frame)
-
-#         # アニメ顔画像のデータベースから取得
-#         # self.animeface = DB.GetAnimeFaces()
-
-#         # ビデオ表示テスト
-#         # アニメ顔画像のデータベースから取得
-#         # self.animeface = DB.GetAnimeFaces()
-#         result = self.animator.update_image()
-#         if result == None:
-#             return
-#         _, flg = result
-#         if not flg:
-#             return
-#         animeface=DB.GetAnimeFaces()
-#         self.animeface =cv2.resize(animeface, (500, 500))
-
-#         #self.animeface = self.frame
-
-#         # Kivy Textureに変換
-#         buf = cv2.flip(self.animeface, -1).tobytes()
-#         texture = Texture.create(size=(self.animeface.shape[1], self.animeface.shape[0]), colorfmt='rgba')
-#         texture.blit_buffer(buf, colorfmt='rgba', bufferfmt='ubyte')
-#         # インスタンスのtextureを変更
-#         self.texture = texture
-
-# def show_img(img, title=""):
-#     cv2.imshow(title, img)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows()
+        self.capture = cv2.VideoCapture(webcamera)
 
 
 
 sm = ScreenManager(transition=WipeTransition())
-# sm.add_widget(TutorialScreen(name='tutorial'))
-# sm.add_widget(SettingsScreen(name='settings'))
 sm.add_widget(VideoScreen(name='video'))
-# sm.add_widget(OtherSettingsScreen(name='other_settings'))
 
 class GanimationApp(App):
     def build(self):
